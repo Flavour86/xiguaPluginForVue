@@ -1,18 +1,23 @@
-const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const config = require('./config')
 
-const utils = {}
-utils.resolvePath = (function () {
-  const resolve = path.resolve
-
-  const base = function () {
-    let agrs = [config.path_base].concat(Array.prototype.slice.call(arguments))
-    return resolve.apply(resolve, agrs)
-  }
-  return {
-    base: base,
-    baseApp: base.bind(null, config.dir_app),
-    baseDist: base.bind(null, config.dir_dist),
-  }
-})()
-module.exports = utils
+exports.isProd = process.env.NODE_ENV === 'production'
+exports.htmlPage = function (title, filename, chunks, template) {
+  return  new HtmlWebpackPlugin({
+    title,
+    cache: true,
+    inject: 'body',
+    filename: filename + '.html',
+    template: template || config.resolvePath.baseApp('index.ejs'),
+    chunks: chunks,
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true
+    }
+  })
+}

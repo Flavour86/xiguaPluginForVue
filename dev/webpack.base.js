@@ -1,26 +1,27 @@
 const path = require('path')
 const webpack = require('webpack')
 const ChromeReloadPlugin  = require('wcer')
+const config = require('./config')
+const entries = require('./entries')
 const utils = require('./utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: {
-    popup: utils.resolve('./popup'),
-    background: utils.resolve('./background')
-  },
+  entry: Object.assign({
+    popup: config.resolvePath.baseApp('popup'),
+    background: config.resolvePath.baseApp('background')
+  }, entries),
   output: {
-    path: path.join(__dirname, '..', 'build'),
+    path: config.resolvePath.base(config.dir_dist),
     publicPath: '/',
-    filename: 'js/[name].js',
-    chunkFilename: 'js/[id].[name].js?[hash]',
-    library: '[name]'
+    filename: 'js/[name].js'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': config.resolvePath.baseApp(),
+      'components': config.resolvePath.baseApp('components')
     }
   },
   module: {
@@ -29,8 +30,9 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [path.join(__dirname, '..', 'src'), path.join(__dirname, '..', 'test')],
+        include: [config.resolvePath.baseApp()],
         options: {
+          emitWarning: !utils.isProd,
           formatter: require('eslint-friendly-formatter')
         }
       },
@@ -38,10 +40,12 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true,
-          loaders: Object.assign({}, cssLoaders(), {
-            js: { loader: 'babel-loader' }
-          }),
+          // extractCSS: true,
+          loaders: [
+            'vue-style-loader',
+            'css-loader',
+            'less-loader'
+          ],
           transformToRequire: {
             video: 'src',
             source: 'src',
@@ -53,7 +57,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include:  [path.join(__dirname, '..', 'src'), path.join(__dirname, '..', 'test')],
+        include:  [config.resolvePath.baseApp()],
+      },
+      {
+        test: /\.less/,
+        loader: 'less-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -82,17 +90,12 @@ module.exports = {
     ]
   },
   plugins: [
-    htmlPage('home', 'app', ['tab']),
-    htmlPage('popup', 'popup', ['popup']),
-    htmlPage('panel', 'panel', ['panel']),
-    htmlPage('devtools', 'devtools', ['devtools']),
-    htmlPage('options', 'options', ['options']),
-    htmlPage('background', 'background', ['background']),
-    new CopyWebpackPlugin([{ from: path.join(__dirname, '..', 'static') }]),
+    utils.htmlPage('popup', 'popup', ['popup']),
+    new CopyWebpackPlugin([{ from: config.resolvePath.base('static') }]),
     new ChromeReloadPlugin({
       port: 9090,
-      manifest: path.join(__dirname, '..', 'src', 'manifest.js')
+      manifest: config.resolvePath.baseApp('manifest.js')
     }),
   ],
-  performance: { hints: false },
+  performance: { hints: 'warning' },
 }
