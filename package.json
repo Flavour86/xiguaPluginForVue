@@ -1,0 +1,20 @@
+{
+  "name": "xiguaPluginForVue",
+  "version": "1.0.0",
+  "description": "An automation development framwork about the chrome extensisons base vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chrome extensions",
+    "vue"
+  ],
+  "author": "flavour",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.4",
+    "wcer": "^1.0.3",
+    "webpack": "^4.23.1"
+  }
+}
