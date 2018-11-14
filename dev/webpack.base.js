@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-// const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
@@ -27,8 +26,9 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [path.join(__dirname, '..', 'src'), path.join(__dirname, '..', 'test')],
+        include: [config.resolvePath.baseApp()],
         options: {
+          emitWarning: !utils.isProd,
           formatter: require('eslint-friendly-formatter')
         }
       },
