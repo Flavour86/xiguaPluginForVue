@@ -26,9 +26,8 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        include: [config.resolvePath.baseApp()],
+        include: [utils.resolvePath.baseApp()],
         options: {
-          emitWarning: !utils.isProd,
           formatter: require('eslint-friendly-formatter')
         }
       },
@@ -89,6 +88,33 @@ module.exports = {
         }
       }
     ]
+  },
+  optimization: {
+    splitChunks:{
+      chunks: 'async',
+      minSize: 30000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      name: false,
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          chunks: 'initial',
+          priority: -10,
+          reuseExistingChunk: false,
+          test: /node_modules\/(.*)\.js/
+        },
+        styles: {
+          name: 'styles',
+          test: /\.(less|css)$/,
+          chunks: 'all',
+          minChunks: 1,
+          reuseExistingChunk: true,
+          enforce: true
+        }
+      }
+    }
   },
   plugins: [
     new webpack.DefinePlugin({
