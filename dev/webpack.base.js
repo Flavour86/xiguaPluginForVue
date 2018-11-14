@@ -1,26 +1,24 @@
 const path = require('path')
 const webpack = require('webpack')
-const ChromeReloadPlugin  = require('wcer')
+// const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
-    popup: utils.resolve('./popup'),
-    background: utils.resolve('./background')
+    popup: utils.resolvePath.baseApp('popup'),
+    background: utils.resolvePath.baseApp('background')
   },
   output: {
-    path: path.join(__dirname, '..', 'build'),
+    path: utils.resolvePath.baseDist(),
     publicPath: '/',
-    filename: 'js/[name].js',
-    chunkFilename: 'js/[id].[name].js?[hash]',
-    library: '[name]'
+    filename: 'static/[name].js'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': utils.resolvePath.baseApp()
     }
   },
   module: {
@@ -38,11 +36,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true,
-          loaders: Object.assign({}, cssLoaders(), {
-            js: { loader: 'babel-loader' }
-          }),
-          transformToRequire: {
+          transformAssetUrls: {
             video: 'src',
             source: 'src',
             img: 'src',
@@ -53,13 +47,28 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include:  [path.join(__dirname, '..', 'src'), path.join(__dirname, '..', 'test')],
+        include: [utils.resolvePath.baseApp()],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'less-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 100000,
           name: 'img/[name].[hash:7].[ext]'
         }
       },
@@ -67,7 +76,7 @@ module.exports = {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 100000,
           name: 'media/[name].[hash:7].[ext]'
         }
       },
@@ -75,24 +84,18 @@ module.exports = {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
+          limit: 100000,
           name: 'fonts/[name].[hash:7].[ext]'
         }
       }
     ]
   },
   plugins: [
-    htmlPage('home', 'app', ['tab']),
-    htmlPage('popup', 'popup', ['popup']),
-    htmlPage('panel', 'panel', ['panel']),
-    htmlPage('devtools', 'devtools', ['devtools']),
-    htmlPage('options', 'options', ['options']),
-    htmlPage('background', 'background', ['background']),
-    new CopyWebpackPlugin([{ from: path.join(__dirname, '..', 'static') }]),
-    new ChromeReloadPlugin({
-      port: 9090,
-      manifest: path.join(__dirname, '..', 'src', 'manifest.js')
+    new webpack.DefinePlugin({
+      'NODE_ENV': config.env
     }),
-  ],
-  performance: { hints: false },
+    new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /zh-cn/),
+    utils.htmlPage('popup', 'popup', ['popup']),
+    new CopyWebpackPlugin([{ from: utils.resolvePath.base('static'), to: utils.resolvePath.baseDist('static') }])
+  ]
 }

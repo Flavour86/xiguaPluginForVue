@@ -1,8 +1,16 @@
 const path = require('path')
-
-module.exports = {
+const base = {
   env: process.env.NODE_ENV || 'development',
-  path_base: path.resolve(__dirname, '../../'),
-  dir_dist: 'dist',
-  dir_app: 'app',
+  pathBase: path.resolve(__dirname, '../../'),
+  dirDist: 'dist',
+  dirApp: 'app',
 }
+
+exports.dev = Object.assign({}, base, {
+  devtool: 'cheap-module-eval-source-map',
+  port: 9090
+})
+
+exports.build = Object.assign({}, base, {
+  devtool: 'none'
+})

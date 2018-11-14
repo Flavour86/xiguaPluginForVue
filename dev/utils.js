@@ -1,18 +1,28 @@
 const path = require('path')
 const config = require('./config')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const utils = {}
-utils.resolvePath = (function () {
+exports.resolvePath = (function () {
   const resolve = path.resolve
 
   const base = function () {
-    let agrs = [config.path_base].concat(Array.prototype.slice.call(arguments))
-    return resolve.apply(resolve, agrs)
+    let args = [config.pathBase].concat(Array.prototype.slice.call(arguments))
+    return resolve.apply(resolve, args)
   }
   return {
     base: base,
-    baseApp: base.bind(null, config.dir_app),
-    baseDist: base.bind(null, config.dir_dist),
+    baseApp: base.bind(null, config.dirApp),
+    baseDist: base.bind(null, config.dirDist),
   }
 })()
-module.exports = utils
+
+exports.htmlPage = (title, filename, chunks, template) => new HtmlWebpackPlugin({
+  title,
+  hash: true,
+  cache: true,
+  inject: 'body',
+  filename: './pages/' + filename + '.html',
+  template: template || exports.resolvePath.baseApp('page.ejs'),
+  appMountId: 'app',
+  chunks
+})
