@@ -13,5 +13,5 @@ exports.dev = Object.assign({}, exports.base, {
 
 exports.build = Object.assign({}, exports.base, {
   devtool: 'none',
-  productionSourceMap: true
+  productionSourceMap: false
 })
