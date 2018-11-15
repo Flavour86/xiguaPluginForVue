@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
+const config = require('./config').base
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
@@ -50,18 +53,20 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: [
-          'vue-style-loader',
-          'css-loader',
-          'less-loader'
-        ]
+        use: ExtractTextPlugin.extract({
+          use: [
+            'css-loader',
+            'less-loader'
+          ],
+          fallback: 'vue-style-loader'
+        })
       },
       {
         test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ]
+        use: ExtractTextPlugin.extract({
+          use: 'css-loader',
+          fallback: 'vue-style-loader'
+        })
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -76,7 +81,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 100000,
-          name: 'media/[name].[hash:7].[ext]'
+          name: 'media/[name].[ext]'
         }
       },
       {
@@ -84,44 +89,24 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 100000,
-          name: 'fonts/[name].[hash:7].[ext]'
+          name: 'fonts/[name].[ext]'
         }
       }
     ]
-  },
-  optimization: {
-    splitChunks:{
-      chunks: 'async',
-      minSize: 30000,
-      minChunks: 1,
-      maxAsyncRequests: 5,
-      maxInitialRequests: 3,
-      name: false,
-      cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          chunks: 'initial',
-          priority: -10,
-          reuseExistingChunk: false,
-          test: /node_modules\/(.*)\.js/
-        },
-        styles: {
-          name: 'styles',
-          test: /\.(less|css)$/,
-          chunks: 'all',
-          minChunks: 1,
-          reuseExistingChunk: true,
-          enforce: true
-        }
-      }
-    }
   },
   plugins: [
     new webpack.DefinePlugin({
       'NODE_ENV': config.env
     }),
     new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /zh-cn/),
+    new ExtractTextPlugin({
+      filename: 'static/[name].css'
+    }),
     utils.htmlPage('popup', 'popup', ['popup']),
+    new ChromeReloadPlugin({
+      port: config.port,
+      manifest: utils.resolvePath.baseApp('manifest.js')
+    }),
     new CopyWebpackPlugin([{ from: utils.resolvePath.base('static'), to: utils.resolvePath.baseDist('static') }])
   ]
 }

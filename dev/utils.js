@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const config = require('./config')
+const config = require('./config').base
 
 exports.resolvePath = (function () {
   const resolve = path.resolve
@@ -22,7 +22,9 @@ exports.htmlPage = (title, filename, chunks, template) => new HtmlWebpackPlugin(
   cache: true,
   inject: 'body',
   filename: './pages/' + filename + '.html',
-  template: template || exports.resolvePath.baseApp('page.ejs'),
+  template: template || exports.resolvePath.baseApp('index.ejs'),
   appMountId: 'app',
   chunks
 })
+
+exports.isProd = config.env !== 'development'

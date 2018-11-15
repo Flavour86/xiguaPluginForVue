@@ -1,6 +1,6 @@
 node_modules
 npm-debug.log*
-build
+xgjPlugin
 coverage
 test/coverage
 
@@ -15,5 +15,3 @@ test/coverage
 
 # OS files
 .DS_STORE
-
-app/static/sso
