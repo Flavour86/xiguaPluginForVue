@@ -7,5 +7,8 @@ const config = require('./config').dev
 
 module.exports = merge(baseWebpack, {
   watch: true,
-  devtool: config.devtool
+  devtool: config.devtool,
+  module: {
+    rules: utils.styleLoaders({ sourceMap: false })
+  }
 })

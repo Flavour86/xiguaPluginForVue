@@ -1,9 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+// const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
 const config = require('./config').base
+// const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
@@ -14,7 +15,7 @@ module.exports = {
   output: {
     path: utils.resolvePath.baseDist(),
     publicPath: '/',
-    filename: 'static/[name].js'
+    filename: 'static/js/[name].js'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -38,6 +39,10 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+          extractCSS: true,
+          loaders: Object.assign({}, utils.cssLoaders(), {
+            js: { loader: 'babel-loader' }
+          }),
           transformAssetUrls: {
             video: 'src',
             source: 'src',
@@ -50,23 +55,6 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [utils.resolvePath.baseApp()],
-      },
-      {
-        test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            'css-loader',
-            'less-loader'
-          ],
-          fallback: 'vue-style-loader'
-        })
-      },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          use: 'css-loader',
-          fallback: 'vue-style-loader'
-        })
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -98,10 +86,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'NODE_ENV': config.env
     }),
+    // new VueLoaderPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /zh-cn/),
-    new ExtractTextPlugin({
-      filename: 'static/[name].css'
-    }),
     utils.htmlPage('popup', 'popup', ['popup']),
     new ChromeReloadPlugin({
       port: config.port,
