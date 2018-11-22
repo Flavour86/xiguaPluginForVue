@@ -14,6 +14,7 @@ exports.resolvePath = (function () {
     base: base,
     baseApp: base.bind(null, config.dirApp),
     baseDist: base.bind(null, config.dirDist),
+    baseTemp: base.bind(null, config.dirDev)
   }
 })()
 
@@ -37,9 +38,7 @@ exports.cssLoaders = (options = {}) => {
     postcss: {},
     less: { loader: 'less'},
     sass: { loader:'sass', options: { indentedSyntax: true } },
-    scss: { loader:'sass' },
-    stylus: { loader: 'stylus' },
-    styl: { loader: 'stylus' }
+    scss: { loader:'sass' }
   }
   for(let key in prePprocessors) {
     let loader = [{

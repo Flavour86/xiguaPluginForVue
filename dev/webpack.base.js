@@ -13,7 +13,6 @@ module.exports = {
     background: utils.resolvePath.baseApp('background')
   },
   output: {
-    path: utils.resolvePath.baseDist(),
     publicPath: '/',
     filename: 'static/js/[name].js'
   },
@@ -39,16 +38,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true,
-          loaders: Object.assign({}, utils.cssLoaders(), {
-            js: { loader: 'babel-loader' }
-          }),
-          transformAssetUrls: {
-            video: 'src',
-            source: 'src',
-            img: 'src',
-            image: 'xlink:href'
-          }
+          extractCSS: utils.isProd
         }
       },
       {

@@ -5,6 +5,7 @@ exports.base = {
   pathBase: path.resolve(__dirname, '../../'),
   dirDist: 'xgjPlugin',
   dirApp: 'app',
+  dirDev: 'temp',
   port: 9090
 }
 exports.dev = Object.assign({}, exports.base, {
