@@ -1,13 +1,16 @@
+const version = '1.0.1'
+
 module.exports = {
   // 清单文件的版本，这个必须写，而且必须是2
   'manifest_version': 2,
   // 插件的名称
   'name': 'xiguaji_v2',
   // 插件的版本
-  'version': '1.0.0',
+  'version': (function () {
+    return version
+  }()),
   // 插件描述
   // "description": "__MSG_pluginDesc__",
-  // 图标，一般偷懒全部用一个尺寸的也没问题
   'icons': {
     '16': 'static/images/48.png',
     '48': 'static/images/48.png',
@@ -17,7 +20,10 @@ module.exports = {
   'background': {
     // 2种指定方式，如果指定JS，那么会自动生成一个背景页
     // "page": "background.html"
-    'scripts': ['static/js/background.js']
+    'scripts': [
+      'static/js/vendor.js',
+      'static/js/background.js'
+    ]
   },
   // 浏览器右上角图标设置，browser_action、page_action、app必须三选一
   'browser_action': {
@@ -34,27 +40,28 @@ module.exports = {
    "default_popup": "popup.html"
    }, */
   // 需要直接注入页面的JS
-  "content_scripts": [
-    {
-      //"matches": ["http://*/*", "https://*/*"],
-      // "<all_urls>" 表示匹配所有地址
-      "matches": ["<all_urls>"],
-      // 多个JS按顺序注入
-      "js": [
-        "static/js/vendor.js"
-      ],
-      // JS的注入可以随便一点，但是CSS的注意就要千万小心了，因为一不小心就可能影响全局样式
-      // "css": ["css/custom.css"],
-      // 代码注入的时间，可选值： "document_start", "document_end", or "document_idle"，最后一个表示页面空闲时，默认document_idle
-      "run_at": "document_start"
-    }
-    // 这里仅仅是为了演示content-script可以配置多个规则
-  ],
+  // "content_scripts": [
+  //   {
+  //     //"matches": ["http://*/*", "https://*/*"],
+  //     // "<all_urls>" 表示匹配所有地址
+  //     "matches": ["<all_urls>"],
+  //     // 多个JS按顺序注入
+  //     // "js": [
+  //     //   "static/js/vendor.js"
+  //     // ],
+  //     // JS的注入可以随便一点，但是CSS的注意就要千万小心了，因为一不小心就可能影响全局样式
+  //     // "css": ["css/custom.css"],
+  //     // 代码注入的时间，可选值： "document_start", "document_end", or "document_idle"，最后一个表示页面空闲时，默认document_idle
+  //     "run_at": "document_start"
+  //   }
+  //   // 这里仅仅是为了演示content-script可以配置多个规则
+  // ],
   'content_security_policy': "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval' 'self'",
   // 权限申请
   'permissions': [
     'contextMenus', // 右键菜单
     'tabs', // 标签
+    'cookies', // cookie
     'notifications', // 通知
     'webRequest', // web请求
     'webRequestBlocking', // 阻塞式web请求

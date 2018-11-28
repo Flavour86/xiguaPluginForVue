@@ -4,15 +4,15 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
 const config = require('./config').base
-// const { VueLoaderPlugin } = require('vue-loader');
+const entries = require('./entries')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: {
+  entry: Object.assign({
     vendor: config.vendors,
     popup: utils.resolvePath.baseApp('popup'),
     background: utils.resolvePath.baseApp('background')
-  },
+  }, entries),
   output: {
     publicPath: '/',
     filename: 'static/js/[name].js'
@@ -79,12 +79,18 @@ module.exports = {
     new ExtractTextPlugin({
       filename: 'static/css/[name].css'
     }),
-    utils.htmlPage('popup', 'popup', ['popup']),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      // filename: 'static/js/[name].js',
-      minChunks: 'Infinity'
+      minChunks (module) {
+        const vendorPath = config.vendors.map(lib => path.join(__dirname, '../node_modules', lib, './'))
+        // any required modules inside node_modules are extracted to vendor
+        return (
+          module.resource &&
+          vendorPath.some(lib => module.resource.indexOf(lib) === 0)
+        )
+      }
     }),
+    utils.htmlPage('popup', 'popup', ['vendor', 'popup']),
     new ChromeReloadPlugin({
       port: config.port,
       manifest: utils.resolvePath.baseApp('manifest.js')

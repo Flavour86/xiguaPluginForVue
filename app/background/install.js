@@ -1,4 +1,5 @@
-import { UNINSTALL_URL, VERSION, INSTALL_URL, PLUGIN_URL, VERSION_KEY } from '../constants'
+import { UNINSTALL_URL, INSTALL_URL, PLUGIN_URL, VERSION_KEY } from '../constants'
+import { VERSION } from '../common/base/helpers'
 import { setCookie, getCookie } from './utils/cookies'
 import { addParam } from '../utils/helpers'
 

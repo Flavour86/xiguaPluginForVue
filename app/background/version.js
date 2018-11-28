@@ -1,6 +1,6 @@
 import REST from '../utils/rest'
 import getApiUrl from '../common/base/api'
-import { VERSION } from '../constants'
+import { VERSION } from '../common/base/helpers'
 
 class Version {
   constructor () {

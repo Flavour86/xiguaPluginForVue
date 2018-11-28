@@ -8,9 +8,9 @@ const base = {
   port: 9090,
   vendors: [
     'vue',
-    'lodash',
     'axios',
-    'json-bigint'
+    'json-bigint',
+    'bignumber.js'
   ]
 }
 // 需要添加到的全局变量
