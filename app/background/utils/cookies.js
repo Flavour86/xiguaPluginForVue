@@ -18,7 +18,7 @@ export const getCookie = (url, name, cb) => {
 export const removeCookie = (name, _url) => {
   chrome.cookies.remove({
     'url': _url,
-    'name':name
+    'name': name
   })
 }
 

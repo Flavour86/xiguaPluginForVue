@@ -1,5 +1,5 @@
 export default class Manager {
-  constructor(prefix, driver) {
+  constructor (prefix, driver) {
     this.prefix = prefix
     this.driver = driver
     this.setItem = (driver.setItem || driver.set).bind(driver)
@@ -7,41 +7,26 @@ export default class Manager {
     this.removeItem = (driver.removeItem || driver.remove).bind(driver)
   }
 
-  set(id, data) {
+  set (id, data) {
     const { prefix } = this
-    id = `${prefix}-${id}`
-    return id && this.setItem(id, data)
+    return id && this.setItem(`${prefix}-${id}`, data)
   }
 
-  get(id) {
+  get (id) {
     const { prefix } = this
-
-    if (!id) {
-      id = `${prefix}-${auth.getTokens('user_id')}`
-    } else {
-      id = `${prefix}-${id}`
-    }
-
-    return this.getItem(id)
+    return this.getItem(`${prefix}-${id}`)
   }
 
-  remove(id) {
+  remove (id) {
     const { prefix } = this
-
-    if (!id) {
-      id = `${prefix}-${auth.getTokens('user_id')}`
-    } else {
-      id = `${prefix}-${id}`
-    }
-
-    return this.removeItem(id)
+    return this.removeItem(`${prefix}-${id}`)
   }
 
-  clear() {
+  clear () {
     return this.driver.clear()
   }
 
-  keys() {
+  keys () {
     return this.driver.keys()
   }
 }

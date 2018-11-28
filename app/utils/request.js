@@ -1,10 +1,8 @@
 import axios from 'axios'
 import json from 'json-bigint'
-import { addParam } from './helpers'
+import { addParam, encode } from './helpers'
 
 const PROTECTION_PREFIX = /^\)\]\}',?\n/
-const encode = window.encodeURIComponent
-
 /**
  * Ajax Request, based on axios
  *

@@ -36,7 +36,7 @@ class Version {
     return parseFloat(ver.replace(/\./g, '')) / 1000
   }
 
-  switchIcon (required, {color = '#ef3f3b', text = '新'}) {
+  switchIcon (required, { color = '#ef3f3b', text = '新' }) {
     if (required) {
       chrome.browserAction.setBadgeBackgroundColor({
         color

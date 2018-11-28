@@ -13,8 +13,7 @@ exports.resolvePath = (function () {
   return {
     base: base,
     baseApp: base.bind(null, config.dirApp),
-    baseDist: base.bind(null, config.dirDist),
-    baseTemp: base.bind(null, config.dirDev)
+    baseDist: base.bind(null, config.dirDist)
   }
 })()
 
@@ -28,8 +27,6 @@ exports.htmlPage = (title, filename, chunks, template) => new HtmlWebpackPlugin(
   appMountId: 'app',
   chunks
 })
-
-exports.isProd = config.env !== 'development'
 
 exports.cssLoaders = (options = {}) => {
   let loaders = {}

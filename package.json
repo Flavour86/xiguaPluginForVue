@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf -rf ./xgjPlugin/",
-    "dev": "rimraf -rf ./temp/ && cross-env NODE_ENV=development webpack --config ./dev/webpack.dev.js --hide-modules",
-    "build": "npm run clean && cross-env NODE_ENV=production webpack --config ./dev/webpack.prod.js -p --progress  --hide-modules --colors"
+    "dev": "cross-env NODE_ENV=development webpack --config ./dev/webpack.dev.js --hide-modules",
+    "build": "npm run clean && cross-env NODE_ENV=production webpack --config ./dev/webpack.prod.js -p --progress  --hide-modules --colors",
+    "lint": "eslint ./app",
+    "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [
     "chrome extensions",

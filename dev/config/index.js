@@ -1,13 +1,25 @@
 const path = require('path')
 
-exports.base = {
-  env: process.env.NODE_ENV || 'development',
+const base = {
+  env: process.env.NODE_ENV,
   pathBase: path.resolve(__dirname, '../../'),
   dirDist: 'xgjPlugin',
   dirApp: 'app',
-  dirDev: 'temp',
-  port: 9090
+  port: 9090,
+  vendors: [
+    'vue',
+    'lodash',
+    'axios',
+    'json-bigint'
+  ]
 }
+// 需要添加到的全局变量
+base.globals = {
+  'NODE_ENV'     : base.env,
+  '__DEV__'      : base.env === 'development',
+  '__PROD__'     : base.env === 'production'
+}
+exports.base = base
 exports.dev = Object.assign({}, exports.base, {
   devtool: 'cheap-module-eval-source-map'
 })

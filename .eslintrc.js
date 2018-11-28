@@ -20,7 +20,8 @@ module.exports = {
     'vue'
   ],
   "globals": {
-    "system": true
+    "system": true,
+    "chrome": true
   },
   // add your custom rules here
   rules: {

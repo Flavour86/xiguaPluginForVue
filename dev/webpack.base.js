@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-// const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ChromeReloadPlugin  = require('wcer')
 const utils = require('./utils')
 const config = require('./config').base
@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
+    vendor: config.vendors,
     popup: utils.resolvePath.baseApp('popup'),
     background: utils.resolvePath.baseApp('background')
   },
@@ -38,7 +39,7 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: utils.isProd
+          extractCSS: true
         }
       },
       {
@@ -73,12 +74,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'NODE_ENV': config.env
-    }),
-    // new VueLoaderPlugin(),
+    new webpack.DefinePlugin(config.globals),
     new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /zh-cn/),
+    new ExtractTextPlugin({
+      filename: 'static/css/[name].css'
+    }),
     utils.htmlPage('popup', 'popup', ['popup']),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      // filename: 'static/js/[name].js',
+      minChunks: 'Infinity'
+    }),
     new ChromeReloadPlugin({
       port: config.port,
       manifest: utils.resolvePath.baseApp('manifest.js')

@@ -1,16 +1,17 @@
 import { UNINSTALL_URL, VERSION, INSTALL_URL, PLUGIN_URL, VERSION_KEY } from '../constants'
-import { removeUserKeyCookie, setCookie, getCookie } from './utils/cookies'
+import { setCookie, getCookie } from './utils/cookies'
 import { addParam } from '../utils/helpers'
 
 const expirationDate = new Date().getTime() / 1000 + 60 * 60 * 24 * 730
 class Install {
   constructor () {
-    chrome.runtime.onInstalled.addListener(this.installed.bind(this));
+    chrome.runtime.onInstalled.addListener(this.installed.bind(this))
+    this.onUnInstall()
   }
 
-  unInstall () {
+  onUnInstall () {
     const _url = UNINSTALL_URL + '?version=' + VERSION + '&type=cv&date=' + new Date().getTime()
-    removeUserKeyCookie()
+    // removeUserKeyCookie()
     chrome.runtime.setUninstallURL(_url)
   }
 
@@ -48,3 +49,5 @@ class Install {
     window.open(url)
   }
 }
+
+export default new Install()

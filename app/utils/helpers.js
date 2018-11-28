@@ -1,3 +1,5 @@
+export const encode = window.encodeURIComponent
+
 export const addParam = (url, params) => {
   let arr = Object.keys(params).map(key => encode(key) + '=' + encode(params[key])).join('&')
 
