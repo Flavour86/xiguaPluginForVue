@@ -1,6 +1,6 @@
-import REST from '../utils/rest'
-import getApiUrl from '../common/base/api'
-import { VERSION } from '../common/base/helpers'
+import REST from 'utils/rest'
+import getApiUrl from 'common/base/api'
+import { VERSION } from 'common/base/helpers'
 
 class Version {
   constructor () {
@@ -12,7 +12,7 @@ class Version {
   checkVersion () {
     new REST([getApiUrl('getVersion')]).GET().then(res => {
       this.serverVersion = res.version
-      this.isNeedUpdate = this.formatVersion(res.version) > this.formatVersion()
+      this.isNeedUpdate = this.formatVersion(this.serverVersion) > this.formatVersion()
       if (this.isNeedUpdate) {
         this.switchIcon(this.isNeedUpdate)
       }
@@ -36,7 +36,7 @@ class Version {
     return parseFloat(ver.replace(/\./g, '')) / 1000
   }
 
-  switchIcon (required, { color = '#ef3f3b', text = '新' }) {
+  switchIcon (required, { color = '#ef3f3b', text = '新' } = {}) {
     if (required) {
       chrome.browserAction.setBadgeBackgroundColor({
         color

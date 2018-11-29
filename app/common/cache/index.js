@@ -1,5 +1,6 @@
 import Manager from './storageManager'
 
 export default {
-  user: new Manager('user', window.localStorage)
+  storage: new Manager(window.localStorage),
+  sessionStorage: new Manager(window.sessionStorage)
 }

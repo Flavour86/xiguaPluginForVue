@@ -20,8 +20,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': utils.resolvePath.baseApp()
+      '@': utils.resolvePath.baseApp(),
+      'utils': utils.resolvePath.baseApp('utils'),
+      'constants': utils.resolvePath.baseApp('constants'),
+      'common': utils.resolvePath.baseApp('common'),
     }
   },
   module: {

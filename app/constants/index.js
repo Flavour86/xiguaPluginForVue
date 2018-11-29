@@ -8,3 +8,4 @@ export const VERSION_KEY = {
   OLD: 'oldVersion',
   LOCAL: 'localVersion'
 }
+export const EXPIRATION_DATE = new Date().getTime() / 1000 + 60 * 60 * 24 * 730

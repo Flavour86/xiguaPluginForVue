@@ -1,9 +1,8 @@
-import { UNINSTALL_URL, INSTALL_URL, PLUGIN_URL, VERSION_KEY } from '../constants'
+import { UNINSTALL_URL, INSTALL_URL, PLUGIN_URL, VERSION_KEY, EXPIRATION_DATE } from '@/constants'
 import { VERSION } from '../common/base/helpers'
 import { setCookie, getCookie } from './utils/cookies'
 import { addParam } from '../utils/helpers'
 
-const expirationDate = new Date().getTime() / 1000 + 60 * 60 * 24 * 730
 class Install {
   constructor () {
     chrome.runtime.onInstalled.addListener(this.installed.bind(this))
@@ -43,7 +42,7 @@ class Install {
           url: PLUGIN_URL,
           name: keyItem.key,
           value: keyItem.value,
-          expirationDate
+          expirationDate: EXPIRATION_DATE
         })
       })
     })

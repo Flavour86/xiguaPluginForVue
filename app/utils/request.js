@@ -74,8 +74,10 @@ export default class Request {
       transformResponse: [function (responseText) {
         let data = responseText.replace(PROTECTION_PREFIX, '')
         try {
+          data = json.parse(data).data
+        } catch (e) {
           data = json.parse(data)
-        } catch (e) { /* Ignore */ }
+        }
         return data
       }],
       ...other
