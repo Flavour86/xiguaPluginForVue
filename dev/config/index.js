@@ -10,7 +10,8 @@ const base = {
     'vue',
     'axios',
     'json-bigint',
-    'bignumber.js'
+    'bignumber.js',
+    'vue-router'
   ]
 }
 // 需要添加到的全局变量

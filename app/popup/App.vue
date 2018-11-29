@@ -1,52 +1,43 @@
 <template>
-  <div class="test">
-    <p>
-      this is popup111111111
-    </p>
+  <div id="app">
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'app',
+  // 监听路由变化 进入开关设置时改变宽
+  watch: {
+    $route (to, from) {
+      let appDom = document.querySelector('#app')
+      if (to.path === '/config') {
+        appDom.style.width = 675 + 'px'
+      } else {
+        appDom.style.width = 360 + 'px'
+      }
+    }
+  }
+}
 </script>
 
-<style lang="less" scoped>
-@import "../theme/css/aaa.less";
-.test {
-  background-color: #000;
-  p {
-    color: #000;
+<style>
+  @import "../theme/css/base/reset.less";
+  #app {
+    border-radius: 4px;
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.10);
+    background: #FFFFFF;
+    width: 360px;
+    overflow: auto;
   }
-}
-.z-toast {
-  .z-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,.3);
-    z-index: 1000;
+
+  #app::-webkit-scrollbar{display: none;}
+
+  .router-fade-enter-active, .router-fade-leave-active {
+    transition: opacity .2s;
   }
-  .z-toast_con {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1020;
-    background-color: rgba(0,0,0,0.85);
-    border-radius: 5px;
-    padding: 20px 15px 10px;
-    text-align: center;
+  .router-fade-enter, .router-fade-leave-active {
+    opacity: 0;
   }
-  .z-toast__content {
-    font-size: 16px;
-    color: #fff;
-    margin-top: 10px;
-  }
-  .z-toast_icon {
-    font-size: 38px;
-    color: #fff;
-  }
-}
+
 </style>

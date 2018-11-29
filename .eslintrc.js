@@ -21,6 +21,9 @@ module.exports = {
   ],
   "globals": {
     "system": true,
+    "__DEV__": true,
+    "__PROD__": true,
+    "$": true,
     "chrome": true
   },
   // add your custom rules here
@@ -28,6 +31,8 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    "no-tabs": "off",
+    "no-mixed-spaces-and-tabs": "off"
   }
 }

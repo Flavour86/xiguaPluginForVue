@@ -47,7 +47,7 @@ class Install {
         })
       })
     })
-    window.open(url)
+    __PROD__ && window.open(url)
   }
 }
 
