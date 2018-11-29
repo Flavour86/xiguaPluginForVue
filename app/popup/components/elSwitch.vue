@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  	name: 'el-switch',
+  name: 'el-switch',
   props: {
     value: {
       type: Boolean,
@@ -26,7 +26,6 @@ export default {
   },
   watch: {
     me_checked (val) {
-      //      this.$emit('input', val);
       this.$emit('setConfig', { 'val': this.me_checked, 'idx': this.idx })
     }
   },
@@ -36,9 +35,6 @@ export default {
         this.me_checked = !this.me_checked
       }
     }
-  },
-  mounted () {
-    console.log(this.isCloseMsg)
   }
 }
 </script>
