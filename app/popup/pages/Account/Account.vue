@@ -1,6 +1,6 @@
 <template>
 	<div class="account-box">
-		<tabbar :idx="1"></tabbar>
+		<tab-bar :idx="1"></tab-bar>
 		<div class="account-router-view">
 			<router-view></router-view>
 		</div>
@@ -8,11 +8,17 @@
 </template>
 
 <script>
-import tabbar from '../../components/tabbar'
+import tabBar from '../../components/tabbar'
 export default{
   name: 'Account',
+  data () {
+    return {
+      isLogin: false,
+      mulAct: []
+    }
+  },
   components: {
-    tabbar
+    tabBar
   },
   mounted () {
     console.log('global.isLogin:' + global.isLogin)

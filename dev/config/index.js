@@ -22,7 +22,7 @@ base.globals = {
 }
 exports.base = base
 exports.dev = Object.assign({}, exports.base, {
-  devtool: 'cheap-module-eval-source-map'
+  devtool: '#cheap-module-eval-source-map'
 })
 
 exports.build = Object.assign({}, exports.base, {

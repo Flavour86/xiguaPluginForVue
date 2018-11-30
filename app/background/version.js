@@ -11,7 +11,8 @@ class Version {
 
   checkVersion () {
     new REST([getApiUrl('getVersion')]).GET().then(res => {
-      this.serverVersion = res.version
+      const { data } = res
+      this.serverVersion = data.version
       this.isNeedUpdate = this.formatVersion(this.serverVersion) > this.formatVersion()
       if (this.isNeedUpdate) {
         this.switchIcon(this.isNeedUpdate)

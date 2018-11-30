@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -16,6 +18,22 @@ export default {
       } else {
         appDom.style.width = 360 + 'px'
       }
+    }
+  },
+  mounted () {
+    this.getLoginState()
+  },
+  methods: {
+    getLoginState () {
+      chrome.runtime.sendMessage({
+        name: 'getLoginState'
+      }, response => {
+        if (!response.loginState) {
+          this.getLoginState()
+          return
+        }
+        this.$bus.$emit('getLoginState', response)
+      })
     }
   }
 }

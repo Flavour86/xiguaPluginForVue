@@ -70,13 +70,12 @@ export default class Request {
     return axios({
       url: url,
       responseType: 'text',
-      // 服务端 bigint 处理
       transformResponse: [function (responseText) {
         let data = responseText.replace(PROTECTION_PREFIX, '')
         try {
-          data = json.parse(data).data
-        } catch (e) {
           data = json.parse(data)
+        } catch (e) {
+          throw e
         }
         return data
       }],

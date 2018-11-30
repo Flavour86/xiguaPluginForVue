@@ -41,7 +41,14 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          extractCSS: true
+          extractCSS: true,
+          sourceMap: config.globals.__PROD__,
+          transformToRequire: {
+            video: 'src',
+            source: 'src',
+            img: 'src',
+            image: 'xlink:href'
+          }
         }
       },
       {
