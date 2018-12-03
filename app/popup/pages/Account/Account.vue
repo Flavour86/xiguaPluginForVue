@@ -1,51 +1,51 @@
 <template>
 	<div class="account-box">
-		<tab-bar :idx="1"></tab-bar>
-		<div class="account-router-view">
-			<router-view></router-view>
+		<div class="account-router-view" style="height: 280px">
+			<my-account v-if="isLogin && mulAct.length" :mulAct.sync="mulAct"></my-account>
+			<not-account v-if="isLogin && !mulAct.length"></not-account>
+			<not-login v-if="!isLogin"></not-login>
 		</div>
 	</div>
 </template>
 
 <script>
-import tabBar from '../../components/tabbar'
-export default{
+import MyAccount from './MyAccount.vue'
+import NotAccount from './NotAccount.vue'
+import NotLogin from './NotLogin.vue'
+
+export default {
   name: 'Account',
+  components: {
+    MyAccount,
+    NotAccount,
+    'not-login': NotLogin
+  },
   data () {
     return {
       isLogin: false,
       mulAct: []
     }
   },
-  components: {
-    tabBar
+  created () {
+    this.$bus.$on('loginState', state => {
+      this.isLogin = state
+    })
   },
-  mounted () {
-    console.log('global.isLogin:' + global.isLogin)
-    let that = this
-    if (global.isLogin) {
-      if (global.mulAct.length >= 1) {
-        this.$router.push({ path: '/account/myaccount' })
+  watch: {
+    isLogin (n, o) {
+      if (n && n !== o) {
         this.mulActGetBiz()
-      } else {
-        // 请求列表
-        this.mulActGetBiz(function () {
-          global.mulAct.length >= 1 ? that.$router.push({ path: '/account/myaccount' }) : that.$router.push({ path: '/account/notaccount' })
-        })
       }
-    } else {
-      this.$router.push({ path: '/account/notlogin' })
     }
   },
   methods: {
-    mulActGetBiz (cb) {
+    mulActGetBiz () {
+      const that = this
       chrome.extension.sendRequest({
         'name': 'mulActGetBiz'
       }, function (res) {
         if (res.state) {
-          let actList = res.list
-          global.mulAct = actList
-          typeof cb === 'function' && cb()
+          that.mulAct = res.list
         }
       })
     }

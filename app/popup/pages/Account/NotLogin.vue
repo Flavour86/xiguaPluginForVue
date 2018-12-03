@@ -11,8 +11,11 @@
 </template>
 
 <script>
-export default{
+export default {
   name: 'NotLogin',
+  created () {
+    alert(1111)
+  },
   methods: {
     toLogin: function () {
       chrome.extension.sendRequest({

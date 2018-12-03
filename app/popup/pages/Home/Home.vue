@@ -1,6 +1,5 @@
 <template>
 	<div class="home-box">
-		<tab-bar :idx="0"></tab-bar>
 		<server></server>
 	</div>
 </template>

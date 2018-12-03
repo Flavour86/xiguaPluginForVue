@@ -45,10 +45,14 @@
 
 <script>
 export default {
+  name: 'MyAccount',
+  props: {
+    mulAct: Array,
+    default: () => []
+  },
   data () {
     return {
       canEdit: false,
-      mulAct: global.mulAct,
       oldSortAct: [],
       showDragged: true
     }
@@ -59,7 +63,6 @@ export default {
     }
   },
   mounted () {
-    this.mulAct = global.mulAct
     this.oldSortAct = this.clone(this.mulAct)
 
     var that = this
@@ -119,8 +122,6 @@ export default {
           that.mulAct = that.mulAct.filter(function (item) {
             return item.bizkey !== bizkey
           })
-
-          global.mulAct = that.mulAct
         }
       })
     },

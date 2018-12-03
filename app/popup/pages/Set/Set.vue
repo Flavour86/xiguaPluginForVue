@@ -1,6 +1,5 @@
 <template>
 	<div class="set-box">
-		<tab-bar :idx="2"></tab-bar>
 		<div v-if="version.hasNewVersion" class="newVersion-fixed">
 			<p><span> <i class="newVersion-triange"></i>有新版本{{ version.newVersion }},<a @click="openLoadUrl"  class="updateBtn" href="javascript:void(0)" style="text-decoration: underline;">点击更新</a></span></p>
 		</div>
@@ -49,7 +48,7 @@ export default{
       hasNewVersioin: false,
       newVersionTxt: '',
       loadUrl: '#',
-      hasLogin: global.isLogin,
+      hasLogin: false,
       version: {
         curVersion: '',
         newVersion: '',
@@ -59,6 +58,11 @@ export default{
   },
   components: {
     tabBar
+  },
+  created () {
+    this.$bus.$on('loginState', state => {
+      this.hasLogin = state
+    })
   },
   mounted () {
     this.checkVersion()

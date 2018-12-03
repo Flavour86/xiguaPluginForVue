@@ -1,27 +1,32 @@
 <template>
 	<div class="tabbar-box">
-			<router-link class="tab-item" to="/">
-				<div :class="[idx === 0?'active':'','tab-item-box home']" >
-					<i class="tab-icon "></i>
-					<span >功能</span>
-				</div>
-			</router-link>
-			<router-link class="tab-item" to="/account/notlogin">
-				<div :class="[idx === 1?'active':'','tab-item-box account']" >
-					<i class="tab-icon"></i>
-					<span >公众号</span>
-				</div>
-			</router-link>
-			<router-link class="tab-item" to="/set">
-				<div :class="[idx === 2?'active':'','tab-item-box set']">
-					<i class="tab-icon"></i>
-					<span style="position: relative;">设置<i v-if="hasNewVersioin" class="red-dot"></i></span>
-				</div>
-			</router-link>
+    <a class="tab-item">
+      <div :class="[idx === 0 ? 'active' : 'tab-item' , 'tab-item-box home']" @click="handlerClick(0)">
+        <i class="tab-icon "></i>
+        <span >功能</span>
+      </div>
+    </a>
+    <a class="tab-item">
+      <div :class="[idx === 1 ? 'active' : 'tab-item' , 'tab-item-box account']" @click="handlerClick(1)">
+        <i class="tab-icon"></i>
+        <span >公众号</span>
+      </div>
+    </a>
+    <a class="tab-item">
+      <div :class="[idx === 2 ? 'active' : 'tab-item', 'tab-item-box set']" @click="handlerClick(2)">
+        <i class="tab-icon"></i>
+        <span style="position: relative;">设置<i v-if="hasNewVersioin" class="red-dot"></i></span>
+      </div>
+    </a>
 	</div>
 </template>
 
 <script>
+const idxMap = {
+  0: '/',
+  1: '/account',
+  2: '/set'
+}
 export default{
   name: 'tabbar',
   props: ['idx'],
@@ -32,7 +37,7 @@ export default{
     }
   },
   mounted () {
-    this.checkVersion()
+    // this.checkVersion()
   },
   methods: {
     bindClickEvent () {
@@ -51,6 +56,10 @@ export default{
           that.hasNewVersioin = response.hasNewVersion
         }
       })
+    },
+    handlerClick (idx) {
+      this.$router.replace({ path: idxMap[idx] })
+      this.$emit('handlerItemClick', idx)
     }
   }
 
