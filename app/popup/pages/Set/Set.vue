@@ -39,7 +39,9 @@
 </template>
 
 <script>
-import tabBar from '../../components/tabbar'
+import { COMMON_STATUS } from '@/constants'
+import { EXTENSION_ID } from 'common/base/'
+
 export default{
   name: 'Set',
   data () {
@@ -56,12 +58,10 @@ export default{
       }
     }
   },
-  components: {
-    tabBar
-  },
   created () {
-    this.$bus.$on('loginState', state => {
-      this.hasLogin = state
+    this.$bus.$on('loginState', res => {
+      this.hasLogin = res.loginState
+      res.user && (this.user = JSON.parse(res.user))
     })
   },
   mounted () {
@@ -69,10 +69,11 @@ export default{
   },
   methods: {
     toLogin: function () {
-      chrome.extension.sendRequest({
-        'name': 'getLoginTicket'
+      chrome.extension.sendRequest(EXTENSION_ID, {
+        name: 'getQrCodeTicket'
       }, function (response) {
-        if (response.errmsg === 'ok') {
+        console.log(response, 'getQrCodeTicket')
+        if (response && response.msg === COMMON_STATUS.SUCCESS) {
           console.log('qrcodeUrl:' + response.qrCodeUrl)
           var url = response.qrCodeUrl + '&from=0'
           window.open(url)
@@ -104,8 +105,7 @@ export default{
       chrome.extension.sendRequest({
         'name': 'checkVersion'
       }, function (response) {
-        console.log('checkVersion:' + JSON.stringify(response))
-        if (response.errmsg === 'ok') {
+        if (response && response.msg === COMMON_STATUS.SUCCESS) {
           that.version.curVersion = response.curVersion
           that.version.newVersion = response.newVersion
           that.version.hasNewVersion = response.hasNewVersion
@@ -118,8 +118,9 @@ export default{
         'name': 'exitLogin'
       }, function (response) {
         if (response.isExit) {
-          global.isLogin = false
-          global.ticket = ''
+          // global.isLogin = false
+          // global.ticket = ''
+          that.$bus.$emit('logout')
           that.$router.replace('/')
         } else {
           console.log('退出登录失败')

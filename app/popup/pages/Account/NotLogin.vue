@@ -11,17 +11,15 @@
 </template>
 
 <script>
-export default {
+import { COMMON_STATUS } from '@/constants'
+export default{
   name: 'NotLogin',
-  created () {
-    alert(1111)
-  },
   methods: {
     toLogin: function () {
       chrome.extension.sendRequest({
-        'name': 'getLoginTicket'
+        'name': 'getQrCodeTicket'
       }, function (response) {
-        if (response.errmsg === 'ok') {
+        if (response.msg === COMMON_STATUS.SUCCESS) {
           console.log('qrcodeUrl:' + response.qrCodeUrl)
           var url = response.qrCodeUrl + '&from=0'
           window.open(url)

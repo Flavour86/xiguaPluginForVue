@@ -11,6 +11,7 @@ class Login {
   }
 
   checkLoginState (uuid) {
+    this.uuid = uuid
     const userInfo = auth.getAuth()
     if (userInfo) {
       const { userKey } = userInfo
@@ -36,6 +37,17 @@ class Login {
       })
     }
   }
+
+  getLoginTicket () {
+    const url = getApiUrl('getQrcode')
+    return new REST([url]).GET({
+      pluginVersion: VERSION,
+      signature: getSign('', aip(), ug()),
+      MachineKey: this.uuid
+    })
+  }
 }
 
-export default new Login()
+export default function () {
+  return global.authModule || (global.authModule = new Login())
+}

@@ -18,7 +18,7 @@ export default {
   components: {
     MyAccount,
     NotAccount,
-    'not-login': NotLogin
+    NotLogin
   },
   data () {
     return {
@@ -27,8 +27,8 @@ export default {
     }
   },
   created () {
-    this.$bus.$on('loginState', state => {
-      this.isLogin = state
+    this.$bus.$on('loginState', res => {
+      this.isLogin = res.loginState
     })
   },
   watch: {

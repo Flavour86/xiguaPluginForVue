@@ -5,14 +5,15 @@
 </template>
 
 <script>
-import tabBar from '../../components/tabbar'
 import server from './server'
 
 export default {
   name: 'Home',
   components: {
-    tabBar,
     server
+  },
+  created () {
+    this.$router.replace('/account')
   }
 }
 </script>

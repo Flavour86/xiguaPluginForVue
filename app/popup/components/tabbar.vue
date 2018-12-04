@@ -22,11 +22,13 @@
 </template>
 
 <script>
+import { COMMON_STATUS } from '@/constants'
 const idxMap = {
   0: '/',
   1: '/account',
   2: '/set'
 }
+
 export default{
   name: 'tabbar',
   props: ['idx'],
@@ -51,8 +53,7 @@ export default{
       chrome.extension.sendRequest({
         'name': 'checkVersion'
       }, function (response) {
-        console.log('checkVersion:' + JSON.stringify(response))
-        if (response.errmsg === 'ok') {
+        if (response.msg === COMMON_STATUS.SUCCESS) {
           that.hasNewVersioin = response.hasNewVersion
         }
       })

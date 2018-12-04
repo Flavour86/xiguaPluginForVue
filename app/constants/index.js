@@ -9,3 +9,8 @@ export const VERSION_KEY = {
   LOCAL: 'localVersion'
 }
 export const EXPIRATION_DATE = new Date().getTime() / 1000 + 60 * 60 * 24 * 730
+
+export const COMMON_STATUS = {
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR'
+}

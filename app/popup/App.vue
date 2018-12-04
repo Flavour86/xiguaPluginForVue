@@ -17,7 +17,9 @@ export default {
   },
   data () {
     return {
-      idx: 0
+      idx: 1,
+      response: {},
+      enterConfig: false
     }
   },
   watch: {
@@ -25,29 +27,42 @@ export default {
       let appDom = document.querySelector('#app')
       if (to.path === '/config') {
         appDom.style.width = 675 + 'px'
+        this.enterConfig = true
       } else {
         appDom.style.width = 360 + 'px'
+        this.enterConfig = false
       }
     }
   },
   mounted () {
     this.getLoginState()
   },
+  created () {
+    this.$bus.$on('logout', () => {
+      this.logout()
+    })
+  },
   methods: {
     getLoginState () {
-      chrome.runtime.sendMessage({
+      chrome.extension.sendRequest({
         name: 'getLoginState'
       }, response => {
-        if (!response.loginState) {
-          setTimeout(this.getLoginState, 300)
+        if (!response.loginState || !response.noTicket) {
+          setTimeout(this.getLoginState, 500)
           return
         }
-        console.log(this.$bus, 'this.$busthis.$busthis.$bus')
-        this.$bus.$emit('loginState', response)
+        this.response = response
+        this.$bus.$emit('loginState', this.response)
       })
     },
     tabBarItemClick (idx) {
       this.idx = idx
+      setTimeout(() => {
+        this.$bus.$emit('loginState', this.response)
+      }, 100)
+    },
+    logout () {
+      this.response = {}
     }
   }
 }

@@ -24,10 +24,6 @@ class Version {
     return this.serverVersion
   }
 
-  getLocalVersion () {
-    return this.localVersion
-  }
-
   hasNewVersion () {
     return this.isNeedUpdate
   }

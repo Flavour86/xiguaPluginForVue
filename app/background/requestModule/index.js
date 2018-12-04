@@ -13,13 +13,13 @@ request.keys().forEach(path => {
 
 class RequestModule {
   constructor () {
-    chrome.runtime.onMessage.addListener(::this.onMessageSend)
+    chrome.extension.onRequest.addListener(::this.onMessageSend)
   }
 
   onMessageSend (message, sender, sendResponse) {
     const { name } = message
     if (name && messageProvider[name]) {
-      messageProvider[name].apply(this, [message, sender, sendResponse])
+      messageProvider[name](message, sender, sendResponse)
     }
   }
 }
